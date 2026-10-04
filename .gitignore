@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Environments
+.venv/
+.env
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Jarvis runtime data (state database, audit log)
+.jarvis/
+
+# Sandbox workspace contents (the directory itself is kept)
+sandbox/*
+!sandbox/.gitkeep

@@ -1,0 +1,64 @@
+[project]
+name = "jarvis"
+version = "0.6.0"
+description = "Jarvis: persistent personal AI assistant core (orchestration, policy, execution, verification, state, audit)."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "pydantic>=2.12",
+    "pydantic-settings>=2.11",
+    "fastapi>=0.115",
+    "uvicorn>=0.32",
+]
+
+[project.optional-dependencies]
+# Real language-model access through LiteLLM. Not needed for the deterministic planner or tests.
+llm = ["litellm>=1.70"]
+# Windows desktop automation (UI Automation via pywinauto). Ignored on other platforms.
+windows = ["pywinauto>=0.6.8; sys_platform == 'win32'"]
+
+[project.scripts]
+jarvis = "jarvis.interface.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4",
+    "ruff>=0.13",
+    "mypy>=1.18",
+    "httpx2>=0.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.12,<0.13"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "live: needs a real language model (opt-in: JARVIS_LIVE_MODEL=1; see tests/test_live_model.py)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py314"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF", "N"]
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+plugins = ["pydantic.mypy"]
+mypy_path = "src"
+packages = ["jarvis"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[tool.ruff.lint.isort]
+known-first-party = ["jarvis"]
+known-local-folder = ["support"]
